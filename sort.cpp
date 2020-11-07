@@ -19,8 +19,8 @@ typedef long long ll;
 
 void selectionSort(vi &elements);
 void insertionSort(vi &elements);
-vi mergeArrays(vi &left, vi &right);
-vi mergeSort(int l, int r, vi &elements);
+void mergeArrays(int l, int r, int m, vi &elements);
+void mergeSort(int l, int r, vi &elements);
 void quickSort(vi &elements);
 void hybridSort(vi &elements);
 
@@ -48,7 +48,7 @@ int main(int argc, char ** argv) {
             insertionSort(elements);
             break;
         case '2':
-            elements = mergeSort(0, elements.size() - 1, elements);
+            mergeSort(0, elements.size() - 1, elements);
             break;
         case '3':
             quickSort(elements);
@@ -104,43 +104,42 @@ void insertionSort(vi &elements) {
 }
 
 // ------------------------------------------ Merge Sort ----------------------------------------
-vi mergeArrays(vi &left, vi &right) {
-    int leftSize = left.size();
-    int rightSize = right.size();
+void mergeArrays(int l, int r, int m, vi &elements) {
+    int leftSize = m - l + 1;
+    int rightSize = r - m;
 
-    vi res(leftSize + rightSize);
+    vi left(leftSize);
+    vi right(rightSize);
+
+    For(i, 0, leftSize) left[i] = elements[l + i];
+    For(i, 0, rightSize) right[i] = elements[m + i + 1];
 
     left.push_back(INT64_MAX);
     right.push_back(INT64_MAX);
 
     int leftindex = 0, rightindex = 0;
 
-    For(i, 0, res.size()) {
-        if(left[leftindex] < right[rightindex]) {
-            res[i] = left[leftindex];
+    For(i, l, r+1) {
+        if(left[leftindex] <= right[rightindex]) {
+            elements[i] = left[leftindex];
             leftindex++;
         }
         else {
-            res[i] = right[rightindex];
+            elements[i] = right[rightindex];
             rightindex++;
         }
     }
-
-    return res;
 }
 
-vi mergeSort(int l, int r, vi &elements) {
+void mergeSort(int l, int r, vi &elements) {
     if(l >= r) {
-        vi element(1);
-        element[0] = elements[l];
-        return element;
+        return;
     }
 
     int m = l + (r - l) / 2;
-    vi left = mergeSort(l, m, elements);
-    vi right = mergeSort(m+1, r, elements);
-    vi res = mergeArrays(left, right);
-    return res;
+    mergeSort(l, m, elements);
+    mergeSort(m+1, r, elements);
+    mergeArrays(l, r, m, elements);
 }
 
 // --------------------------------------- Quick Sort ------------------------------------------
