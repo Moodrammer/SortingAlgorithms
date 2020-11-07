@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <chrono>
+#include <cstdlib>
 #include <iostream>
 
 using std::string;
@@ -17,11 +18,14 @@ typedef long long ll;
 #define snapTime() std::chrono::high_resolution_clock::now()
 #define For(i, init, n) for(int i = init; i < n; i++)
 
+void swap(int e1, int e2, vi &elements);
+
 void selectionSort(vi &elements);
 void insertionSort(vi &elements);
 void mergeArrays(int l, int r, int m, vi &elements);
 void mergeSort(int l, int r, vi &elements);
-void quickSort(vi &elements);
+int quickPartition(int l, int r, vi &elements);
+void quickSort(int l, int r, vi &elements);
 void hybridSort(vi &elements);
 
 
@@ -51,7 +55,7 @@ int main(int argc, char ** argv) {
             mergeSort(0, elements.size() - 1, elements);
             break;
         case '3':
-            quickSort(elements);
+            quickSort(0, elements.size() - 1, elements);
             break;
         case '4':
             hybridSort(elements);
@@ -71,6 +75,13 @@ int main(int argc, char ** argv) {
     fin.close();
 }
 
+
+// --------------------------------------- Utility functions -----------------------------------
+void swap(int e1, int e2, vi &elements) {
+    ll temp = elements[e1];
+    elements[e1] = elements[e2];
+    elements[e2] = temp;
+}
 // --------------------------------------- Selection Sort --------------------------------------
 void selectionSort(vi &elements) {
     int minimumElementIndex;
@@ -82,9 +93,7 @@ void selectionSort(vi &elements) {
             }
         }
         if(minimumElementIndex != i) {
-            ll temp = elements[minimumElementIndex];
-            elements[minimumElementIndex] = elements[i];
-            elements[i] = temp;
+            swap(minimumElementIndex, i, elements);
         }
     }
 }
@@ -143,8 +152,30 @@ void mergeSort(int l, int r, vi &elements) {
 }
 
 // --------------------------------------- Quick Sort ------------------------------------------
-void quickSort(vi &elements) {
-    cout << "This is quick sort" << std::endl;
+int quickPartition(int l, int r, vi &elements) {
+    int randIndex = l + (std::rand() % (r - l + 1));
+    swap(r, randIndex, elements);
+    ll pivot = elements[r];
+
+    int lastSmallestOrEqualIndex = l-1;
+    For(i, l, r) {
+        if(elements[i] <= pivot) {
+            lastSmallestOrEqualIndex++;
+            swap(lastSmallestOrEqualIndex, i, elements);
+        }
+    }
+
+    swap(lastSmallestOrEqualIndex + 1, r, elements);
+    return lastSmallestOrEqualIndex+1;
+}
+
+void quickSort(int l, int r, vi &elements) {
+    if(l >= r) 
+        return;
+
+    int pivotLocation = quickPartition(l, r, elements);
+    quickSort(l, pivotLocation-1, elements);
+    quickSort(pivotLocation+1, r, elements);
 }
 
 // ---------------------------------------- Hybrid Sort ----------------------------------------
