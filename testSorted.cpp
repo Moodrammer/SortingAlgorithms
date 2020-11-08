@@ -12,14 +12,18 @@ int main(int argc, char ** argv) {
     int element1, element2;
     fin >> element1;
     bool good = true;
+    int cnt = 1;
     while(fin >> element2) {
-        cout << element2 << " " << element1 << endl;
+        cnt++;
+        // cout << element2 << " " << element1 << endl;
         if(element2 - element1 < 0) {
             good = false;
             break;
         }
         element1 = element2;
     }
+
+    cout << "The number of elements is : " << cnt << endl;
     if(good)
         cout << inputFilePath << " is sorted" << endl;
     else

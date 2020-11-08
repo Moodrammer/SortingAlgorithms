@@ -18,8 +18,12 @@ typedef long long ll;
 #define snapTime() std::chrono::high_resolution_clock::now()
 #define For(i, init, n) for(int i = init; i < n; i++)
 
+// utilities
 void swap(int e1, int e2, vi &elements);
+bool isSorted(vi &elements);
+bool isReversed(vi &elements);
 
+// algorithms
 void selectionSort(vi &elements);
 void insertionSort(vi &elements);
 void mergeArrays(int l, int r, int m, vi &elements);
@@ -81,6 +85,22 @@ void swap(int e1, int e2, vi &elements) {
     ll temp = elements[e1];
     elements[e1] = elements[e2];
     elements[e2] = temp;
+}
+
+bool isSorted(vi &elements) {
+    For(i, 0, elements.size() - 1) {
+        if(elements[i + 1] < elements[i])
+            return false;
+    }
+    return true;
+}
+
+bool isReversed(vi &elements) {
+    For(i, 0, elements.size() - 1) {
+        if(elements[i + 1] > elements[i])
+            return false;
+    }
+    return true;
 }
 // --------------------------------------- Selection Sort --------------------------------------
 void selectionSort(vi &elements) {
@@ -180,5 +200,9 @@ void quickSort(int l, int r, vi &elements) {
 
 // ---------------------------------------- Hybrid Sort ----------------------------------------
 void hybridSort(vi &elements) {
-    cout << "This is hybrid sort" << std::endl;
+    // if an array is already sorted do nothing (O(n) to check if sorted)
+    if(isSorted(elements)) 
+        return;
+    // The implementation of quickSort uses a randomized pivot to avoid unbalanced partioning 
+    quickSort(0, elements.size() - 1, elements);
 }
