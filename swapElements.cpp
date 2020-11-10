@@ -27,12 +27,14 @@ int main(int argc, char ** argv) {
     fin.close();
     int randomNum1, randomNum2;
     srand(time(NULL));
+    int j;
     while(numSwaps--) {
         randomNum1 = rand() % elmnts.size();
-        randomNum2 = rand() % elmnts.size();
-        swap(elmnts[randomNum1], elmnts[randomNum2]);
+        if(randomNum1 - 1 >= 0) j = randomNum1 - 1;
+        else j = randomNum1 + 1;
+        swap(elmnts[randomNum1], elmnts[j]);
     }
-
+    filepath = "SortedFiles/nsorted_data_" + operation + "_" + size + ".txt";
     ofstream fout(filepath);
     
     for(int i = 0; i < elmnts.size(); i++) {

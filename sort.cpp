@@ -20,10 +20,6 @@ typedef long long ll;
 #define snapTime() std::chrono::high_resolution_clock::now()
 #define For(i, init, n) for(int i = init; i < n; i++)
 
-const double nearlySortedThreshold = 0.01;
-
-// utilities
-bool isSorted(vi &elements);
 
 // algorithms
 void selectionSort(vi &elements);
@@ -83,15 +79,6 @@ int main(int argc, char ** argv) {
 }
 
 
-// --------------------------------------- Utility functions -----------------------------------
-bool isSorted(vi &elements) {
-    For(i, 0, elements.size() - 1) {
-        if(elements[i + 1] < elements[i])
-            return false;
-    }
-    return true;
-}
-
 // --------------------------------------- Selection Sort --------------------------------------
 void selectionSort(vi &elements) {
     int minimumElementIndex;
@@ -120,6 +107,7 @@ void insertionSort(vi &elements) {
         elements[j+1] = curr;
     }
 }
+
 
 // ------------------------------------------ Merge Sort ----------------------------------------
 void mergeArrays(int l, int r, int m, vi &elements) {
@@ -189,22 +177,19 @@ void quickSort(int l, int r, vi &elements) {
 
 // ---------------------------------------- Hybrid Sort ----------------------------------------
 void hybridSort(vi &elements) {
-    if(isSorted(elements)) 
-        return;
-    vi el = elements;
-    int mid = (elements.size() - 1) / 2;
-    quickSort(0, mid, el);
-    quickSort(mid+1, el.size() - 1, el);
-    el.push_back(INT64_MAX);
-    int l = 0, r = mid+1;
-    For(i, 0, elements.size()) {
-        if(el[l] <= el[r] && l <= mid) {
-            elements[i] = el[l];
-            l++; 
+    int cntSwaps = 0;
+    For(i, 1, elements.size()) {
+        ll curr = elements[i];
+        int j = i-1;
+        while(j >= 0 && curr < elements[j]) {
+            elements[j+1] = elements[j];
+            j--;
+            cntSwaps ++;
         }
-        else {
-            elements[i] = el[r];
-            r++;
+        elements[j+1] = curr;
+        if(cntSwaps >= elements.size() / 10) {
+            quickSort(0, elements.size() - 1, elements);
+            return;
         }
     }
 }

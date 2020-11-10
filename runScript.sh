@@ -26,7 +26,11 @@ then
 elif [ $sorted = 's' ]
 then
     ./output ${op} SortedFiles/sorted_data_${op}_${i}.txt sorted_out.txt runningTimes/sorted_running_time_${op}_${i}.txt
+elif [ $sorted = 'd' ]
+then
+    ./output ${op} data/descending_arr_${i}.txt sorted_out.txt runningTimes/reverse_running_time_${op}_${i}.txt
 else
-    ./output ${op} descending_arr.txt sorted_out.txt runningTimes/reverse_running_time_${op}_${i}.txt
+    echo "ran on nearly sorted"
+    ./output ${op} SortedFiles/nsorted_data_4_${i}.txt SortedFiles/sorted_data_${op}_${i}.txt runningTimes/sorted_running_time_${op}_${i}.txt
 fi
 done

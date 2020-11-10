@@ -28,8 +28,11 @@ do
     elif [ $sorted = 's' ]
     then
         cat "runningTimes/sorted_running_time_${op}_${i}.txt" >> "running_time.txt" 
-    else
+    elif [ $sorted = 'd' ]
+    then
         cat "runningTimes/reverse_running_time_${op}_${i}.txt" >> "running_time.txt"
+    else
+        cat "runningTimes/sorted_running_time_${op}_${i}.txt" >> "running_time.txt"  
     fi
 done
 
